@@ -20,4 +20,19 @@ describe('DarkModeToggleComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should active the dark mode', () => {
+    expect(document.documentElement.classList.contains('dark')).toBeFalse();
+    component.modeHandler();
+    expect(component.isDark()).toBeTrue();
+    expect(document.documentElement.classList.contains('dark')).toBeTrue();
+  });
+
+  it('should remove the dark mode', () => {
+    document.documentElement.classList.add('dark');
+    component.isDark.set(true);
+    component.modeHandler();
+    expect(document.documentElement.classList.contains('dark')).toBeFalse();
+    expect(component.isDark()).toBeFalse();
+  });
 });
