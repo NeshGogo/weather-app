@@ -5,5 +5,24 @@
       [items]="places()"
       (selected)="selectPlace($event)"
     ></app-searcher>
+    @if (place()) {
+    <div
+      class="mt-4 shadow dark:shadow-indigo-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-indigo-950 dark:border-indigo-800"
+    >
+      <h1
+        class="mb-1 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+      >
+        {{ place()?.name }}
+      </h1>
+      <p class="mb-3 text-gray-500 dark:text-gray-400">
+        Chance of rain: {{ weather()?.current?.precipitation?.total }}%
+      </p>
+      <h1
+        class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+      >
+        {{ weather()?.current?.temperature }} °
+      </h1>
+    </div>
+    }
   </div>
 </app-layout>
