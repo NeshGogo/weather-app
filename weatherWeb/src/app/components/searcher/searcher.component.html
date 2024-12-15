@@ -5,6 +5,9 @@
       type="text"
       role="combobox"
       aria-expanded="false"
+      (blur)="hideResults()"
+      (focus)="showResults()"
+      (input)="searchItem($event)"
       [placeholder]="placeholder()"
     />
     <div class="absolute top-1/2 end-3 -translate-y-1/2" aria-expanded="false">
@@ -30,7 +33,9 @@
     class="shadow dark:shadow-indigo-700 absolute z-50 w-full max-h-72 p-1 bg-white border border-gray-200 rounded-lg overflow-hidden overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 dark:bg-indigo-950 dark:border-indigo-800"
   >
     @for (item of items(); track $index) {
-    <p (click)="selectedItem(item)">{{ item.name }}</p>
+    <p class="text-white cursor-pointer" (click)="selectedItem(item)">{{ item.name }}</p>
+    }@empty {
+      <p class="text-white">There aren't any results.</p>
     }
   </div>
   }

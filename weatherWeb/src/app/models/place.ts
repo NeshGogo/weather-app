@@ -1,4 +1,7 @@
-export interface Place {
+import { SearcherItem } from "./searcherItem";
+
+export interface Place extends SearcherItem {
+  id: string;
   name: string;
   place_id: string;
   adm_area1: string;

@@ -1,9 +1,5 @@
 import { Component, input, output, signal } from '@angular/core';
-
-interface HasNameAndId {
-  name: string;
-  id: string;
-}
+import { SearcherItem } from '../../models/searcherItem';
 
 @Component({
   selector: 'app-searcher',
@@ -11,14 +7,30 @@ interface HasNameAndId {
   templateUrl: './searcher.component.html',
   styles: '',
 })
-export class SearcherComponent<type extends HasNameAndId> {
+export class SearcherComponent<type extends SearcherItem> {
   showOptions = signal(false);
   placeholder = input('Enter a country name...');
   onKeyUp = output<string>();
-  items = input<type[]>();
+  items = input<type[]>([]);
   selected = output<type>();
 
   selectedItem(item: type) {
     this.selected.emit(item);
+    this.showOptions.set(false);
+  }
+
+  searchItem(ev: any) {
+    ev.preventDefault();
+    this.onKeyUp.emit(ev.target.value);
+  }
+
+  hideResults() {
+    setTimeout(() => {
+      this.showOptions.set(false);
+    }, 200);
+  }
+
+  showResults() {
+    this.showOptions.set(true);
   }
 }

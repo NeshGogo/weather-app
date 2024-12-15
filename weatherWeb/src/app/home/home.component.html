@@ -1,0 +1,9 @@
+<app-layout>
+  <div class="mt-2">
+    <app-searcher
+      (onKeyUp)="fetchPlace($event)"
+      [items]="places()"
+      (selected)="selectPlace($event)"
+    ></app-searcher>
+  </div>
+</app-layout>
