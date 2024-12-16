@@ -7,9 +7,10 @@
     ></app-searcher>
     @if (place()) {
     <div
-      class="mt-4 shadow dark:shadow-indigo-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-indigo-950 dark:border-indigo-800"
+      class="flex justify-between items-center  mt-4 shadow dark:shadow-indigo-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-indigo-950 dark:border-indigo-800"
     >
-      <h1
+      <div>
+        <h1
         class="uppercase mb-1 text-xl font-extrabold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-6xl dark:text-white"
       >
         {{ place()?.name }}
@@ -22,6 +23,10 @@
       >
         {{ weather()?.current?.temperature?.toFixed() }}°
       </h1>
+      </div>
+      <div>
+        <img class="md:w-32" src="assets/icons/big/{{weather()?.current?.icon_num}}.png" [alt]="weather()?.current?.summary">
+      </div>
     </div>
     } @if (weather()) {
     <div
@@ -37,11 +42,12 @@
       >
         @for (item of weather()?.hourly?.data; track $index) {
         <div
-          class="text-center shadow m-2 dark:shadow-blue-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-blue-950 dark:border-blue-950"
+          class="flex flex-col justify-between text-center shadow m-2 dark:shadow-blue-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-blue-950 dark:border-blue-950"
         >
           <p class="mb-3 text-gray-500 dark:text-gray-400">
             {{ item.date | date : "HH" }}:00
           </p>
+          <img src="assets/icons/medium/{{item.icon}}.png" [alt]="weather()?.current?.summary">
           <p class="mb-3 font-bold text-gray-500 dark:text-gray-400">
             {{ item.temperature.toFixed() }}°
           </p>
@@ -63,13 +69,14 @@
       >
         @for (item of weather()?.daily?.data; track $index) {
         <div
-          class="text-center shadow m-2 dark:shadow-blue-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-blue-950 dark:border-blue-950"
+          class="flex flex-col justify-between text-center shadow m-2 dark:shadow-blue-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-blue-950 dark:border-blue-950"
         >
           <p class="mb-3 text-gray-500 dark:text-gray-400">
             @if ($index === 0) { Today }@else {
             {{ item.day | date : "EEEE" }}
             }
           </p>
+          <img class="text-center"  src="assets/icons/big/{{item.icon}}.png" [alt]="weather()?.current?.summary">
           <p class="mb-3 font-bold text-gray-500 dark:text-gray-400">
             {{ item.all_day.temperature_max.toFixed() }}/{{ item.all_day.temperature_min.toFixed()}}
           </p>
