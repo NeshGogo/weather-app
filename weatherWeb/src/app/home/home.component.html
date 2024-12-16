@@ -10,7 +10,7 @@
       class="mt-4 shadow dark:shadow-indigo-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-indigo-950 dark:border-indigo-800"
     >
       <h1
-        class="mb-1 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        class="uppercase mb-1 text-xl font-extrabold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-6xl dark:text-white"
       >
         {{ place()?.name }}
       </h1>
@@ -18,10 +18,34 @@
         Chance of rain: {{ weather()?.current?.precipitation?.total }}%
       </p>
       <h1
-        class="text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white"
+        class="text-xl font-extrabold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-6xl dark:text-white"
       >
-        {{ weather()?.current?.temperature }} °
+        {{ weather()?.current?.temperature }}°
       </h1>
+    </div>
+    }
+
+    @if (weather()) {
+      <div
+      class="mt-4 shadow dark:shadow-indigo-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-indigo-950 dark:border-indigo-800"
+    >
+      <h1
+        class="uppercase mb-1 text-lg font-extrabold leading-none tracking-tight text-gray-900 md:text-xl lg:text-6xl dark:text-white"
+      >
+       today's forecast
+      </h1>
+     <div class="flex justify-evenly overflow-x-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
+      @for (item of weather()?.hourly?.data; track $index) {
+        <div class="text-center shadow m-2 dark:shadow-blue-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-blue-950 dark:border-blue-950">
+          <p class="mb-3 text-gray-500 dark:text-gray-400">
+            {{item.date | date: 'HH'}}:00
+          </p>
+          <p class="mb-3 font-bold text-gray-500 dark:text-gray-400">
+            {{item.temperature}}°
+          </p>
+        </div>
+      }
+     </div>
     </div>
     }
   </div>

@@ -5,10 +5,11 @@ import { WeatherService } from '../services/weather.service';
 import { Place } from '../models/place';
 import { debounceTime } from 'rxjs';
 import { Weather } from '../models/weather';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [LayoutComponent, SearcherComponent],
+  imports: [LayoutComponent, SearcherComponent, DatePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
