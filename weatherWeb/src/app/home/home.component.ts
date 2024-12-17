@@ -6,10 +6,11 @@ import { Place } from '../models/place';
 import { debounceTime } from 'rxjs';
 import { Weather } from '../models/weather';
 import { DatePipe } from '@angular/common';
+import { AirConditionSectionComponent } from "../components/air-condition-section/air-condition-section.component";
 
 @Component({
   selector: 'app-home',
-  imports: [LayoutComponent, SearcherComponent, DatePipe],
+  imports: [LayoutComponent, SearcherComponent, DatePipe, AirConditionSectionComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
