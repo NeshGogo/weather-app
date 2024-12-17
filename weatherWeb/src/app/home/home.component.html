@@ -22,7 +22,7 @@
       [summary]="weather()?.current?.summary"
     />
     } @if (!loading() && weather()) {
-    <app-air-condition-section [weather]="weather()" />
+    <app-air-condition-section [unit]="unit()" [weather]="weather()" />
 
     <app-weather-progress-view
       title="today's forecast"
