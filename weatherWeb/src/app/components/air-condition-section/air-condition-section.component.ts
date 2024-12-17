@@ -35,7 +35,7 @@ import { Weather } from '../../models/weather';
           <div>
             <p class="mb-3 text-gray-500 dark:text-gray-400">Wind</p>
             <p class="mb-3 font-bold text-gray-500 dark:text-gray-400">
-              {{ weather()?.current?.wind?.speed }} Km/h
+              {{ weather()?.current?.wind?.speed }} {{unit() === 'c'? 'Km/h': 'Mph'}}
             </p>
           </div>
           <img
@@ -63,5 +63,6 @@ import { Weather } from '../../models/weather';
   `,
 })
 export class AirConditionSectionComponent {
+  unit = input('C');
   weather = input<Weather | null>(null);
 }

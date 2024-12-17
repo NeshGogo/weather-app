@@ -31,6 +31,7 @@ export class HomeComponent {
   weather = signal<Weather | null>(null);
   hourlyProgression = signal<Pregression[]>([]);
   dailyProgression = signal<Pregression[]>([]);
+  unit = signal('C');
 
   fetchPlace(text: string) {
     this.weatherService
@@ -47,8 +48,9 @@ export class HomeComponent {
   }
 
   fetchWeather() {
+    const units = this.unit() === 'C'? 'metric' : 'us';
     this.weatherService
-      .getWeather(<string>this.place()?.place_id, 'metric')
+      .getWeather(<string>this.place()?.place_id, units)
       .subscribe((weather) => {
         this.weather.set(weather);
         this.hourlyProgression.set(
@@ -73,6 +75,14 @@ export class HomeComponent {
             };
           })]
         );
+        console.log(weather);
       });
+  }
+
+  handleUnitChange(unit:string){
+    this.unit.set(unit);
+    if(this.place()){
+      this.fetchWeather();
+    }
   }
 }

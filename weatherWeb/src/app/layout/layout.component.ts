@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { DarkModeToggleComponent } from "../components/dark-mode-toggle/dark-mode-toggle.component";
 import { UnitToggleComponent } from "../components/unit-toggle/unit-toggle.component";
 
@@ -9,5 +9,5 @@ import { UnitToggleComponent } from "../components/unit-toggle/unit-toggle.compo
   styles: ''
 })
 export class LayoutComponent {
-
+  unitChange = output<string>();
 }

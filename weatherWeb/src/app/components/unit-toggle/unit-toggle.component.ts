@@ -8,10 +8,10 @@ import { Component, output, signal } from '@angular/core';
 })
 export class UnitToggleComponent {
   isCelsius = signal(true);
-  click = output<string>();
+  unitChange = output<string>();
 
   unitHandler(){
     this.isCelsius.set(!this.isCelsius());
-    this.click.emit(this.isCelsius()? 'C' : 'F');
+    this.unitChange.emit(this.isCelsius()? 'C' : 'F');
   }
 }
