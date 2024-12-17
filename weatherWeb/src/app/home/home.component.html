@@ -5,7 +5,15 @@
       [items]="places()"
       (selected)="selectPlace($event)"
     ></app-searcher>
-    @if (place() && weather()) {
+
+    @if (loading()) {
+    <div class="flex flex-col items-center mt-4 ">
+      <app-skeleton />
+      <app-skeleton />
+      <app-skeleton />
+      <app-skeleton />
+    </div>
+    } @if (!loading() && place() && weather()) {
     <app-summary-section
       [name]="place()?.name"
       [precipitation]="weather()?.current?.precipitation?.total"
@@ -13,7 +21,7 @@
       [icon]="weather()?.current?.icon_num"
       [summary]="weather()?.current?.summary"
     />
-    } @if (weather()) {
+    } @if (!loading() && weather()) {
     <app-air-condition-section [weather]="weather()" />
 
     <app-weather-progress-view
