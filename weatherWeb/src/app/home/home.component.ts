@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { AirConditionSectionComponent } from '../components/air-condition-section/air-condition-section.component';
 import { WeatherProgressViewComponent } from '../components/weather-progress-view/weather-progress-view.component';
 import { Pregression } from '../models/progression';
+import { SummarySectionComponent } from "../components/summary-section/summary-section.component";
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,8 @@ import { Pregression } from '../models/progression';
     DatePipe,
     AirConditionSectionComponent,
     WeatherProgressViewComponent,
-  ],
+    SummarySectionComponent
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

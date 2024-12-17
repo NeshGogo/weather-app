@@ -6,32 +6,13 @@
       (selected)="selectPlace($event)"
     ></app-searcher>
     @if (place() && weather()) {
-    <div
-      class="flex justify-between items-center mt-4 shadow dark:shadow-indigo-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-indigo-950 dark:border-indigo-800"
-    >
-      <div>
-        <h1
-          class="uppercase mb-1 text-xl font-extrabold leading-none tracking-tight text-gray-700 md:text-2xl dark:text-white"
-        >
-          {{ place()?.name }}
-        </h1>
-        <p class="mb-3 text-gray-500 dark:text-gray-400">
-          Chance of rain: {{ weather()?.current?.precipitation?.total }}%
-        </p>
-        <h1
-          class="text-xl font-extrabold leading-none tracking-tight text-gray-700 md:text-2xl dark:text-white"
-        >
-          {{ weather()?.current?.temperature?.toFixed() }}°
-        </h1>
-      </div>
-      <div>
-        <img
-          class="md:w-32"
-          src="assets/icons/big/{{ weather()?.current?.icon_num }}.png"
-          [alt]="weather()?.current?.summary"
-        />
-      </div>
-    </div>
+    <app-summary-section
+      [name]="place()?.name"
+      [precipitation]="weather()?.current?.precipitation?.total"
+      [temperature]="weather()?.current?.temperature"
+      [icon]="weather()?.current?.icon_num"
+      [summary]="weather()?.current?.summary"
+    />
     } @if (weather()) {
     <app-air-condition-section [weather]="weather()" />
 
