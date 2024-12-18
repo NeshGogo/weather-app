@@ -1,7 +1,3 @@
 ﻿namespace WeatherApi.Infrastructure.WeatherService;
 
-public class PlaceApiModel
-{
-    public string Place_id { get; set; }
-    public string Name { get; set; }
-}
+public record PlaceApiModel(string Place_id, string Name);
