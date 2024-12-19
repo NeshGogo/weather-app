@@ -2,9 +2,10 @@
 
 public record WeatherApiModel(CurrentWeather Current, Hourly hourly, Daily daily);
 
-public record CurrentWeather(Precipitation Precipitation, decimal Temperature, int Icon_num, string Summary);
+public record CurrentWeather(Precipitation Precipitation, decimal Temperature, int Icon_num, string Summary, Wind Wind);
 
 public record Precipitation(decimal Total);
+public record Wind(decimal Speed);
 
 public record Hourly(IEnumerable<DataHourlyPregression> Data);
 public record Daily(IEnumerable<DataDailyPregression> Data);

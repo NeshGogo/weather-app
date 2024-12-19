@@ -19,12 +19,14 @@ public static class WeatherApiEndpoints
         {
             var weather = await service.GetWeather(placeId, units, options.Key);
 
-            var hourly = weather.hourly.Data.Select(p => new Progression($"{p.Date.Hour}:00", p.Icon, $"{p.Temperature}°"));
-            var daily = weather.daily.Data.Select(p => new Progression(p.Day.DayOfWeek.ToString(), p.Icon, $"{p.All_day.Temperature_max}/{p.All_day.Temperature_min}"));
+            var hourly = weather.hourly.Data.Select(p => new Progression($"{p.Date.Hour}:00", p.Icon, $"{Math.Round(p.Temperature)}°"));
+            var daily = weather.daily.Data.Select(p => 
+                new Progression(p.Day.DayOfWeek.ToString(), p.Icon, $"{Math.Round(p.All_day.Temperature_max)}/{Math.Round(p.All_day.Temperature_min)}"));
 
             return new GetWeatherResponse(
                 weather.Current.Precipitation.Total,
                 weather.Current.Temperature,
+                weather.Current.Wind.Speed,
                 weather.Current.Icon_num,
                 weather.Current.Summary,
                 hourly,
