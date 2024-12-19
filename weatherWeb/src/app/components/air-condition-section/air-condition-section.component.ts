@@ -20,12 +20,12 @@ import { Weather } from '../../models/weather';
           <div>
             <p class="mb-3 text-gray-500 dark:text-gray-400">Real Feel</p>
             <p class="mb-3 font-bold text-gray-500 dark:text-gray-400">
-              {{ weather()?.current?.temperature?.toFixed() }}°
+              {{ weather()?.temperature?.toFixed() }}°
             </p>
           </div>
           <img
-            src="assets/icons/small/{{ weather()?.current?.icon_num }}.png"
-            [alt]="weather()?.current?.summary"
+            src="assets/icons/small/{{ weather()?.icon }}.png"
+            [alt]="weather()?.summary"
           />
         </div>
 
@@ -35,12 +35,12 @@ import { Weather } from '../../models/weather';
           <div>
             <p class="mb-3 text-gray-500 dark:text-gray-400">Wind</p>
             <p class="mb-3 font-bold text-gray-500 dark:text-gray-400">
-              {{ weather()?.current?.wind?.speed }}  {{unit() === 'C'? 'Km/h': 'Mph'}}
+              {{ weather()?.wind }}  {{unit() === 'C'? 'Km/h': 'Mph'}}
             </p>
           </div>
           <img
-            src="assets/icons/medium/{{ weather()?.current?.icon_num }}.png"
-            [alt]="weather()?.current?.summary"
+            src="assets/icons/medium/{{ weather()?.icon }}.png"
+            [alt]="weather()?.summary"
           />
         </div>
 
@@ -50,12 +50,12 @@ import { Weather } from '../../models/weather';
           <div>
             <p class="mb-3 text-gray-500 dark:text-gray-400">Change of rain</p>
             <p class="mb-3 font-bold text-gray-500 dark:text-gray-400">
-              {{ weather()?.current?.precipitation?.total }}%
+              {{ weather()?.precipitation }}%
             </p>
           </div>
           <img
-            src="assets/icons/medium/{{ weather()?.current?.icon_num }}.png"
-            [alt]="weather()?.current?.summary"
+            src="assets/icons/medium/{{ weather()?.icon }}.png"
+            [alt]="weather()?.summary"
           />
         </div>
       </div>
