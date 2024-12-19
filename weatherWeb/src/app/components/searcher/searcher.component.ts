@@ -10,11 +10,13 @@ import { SearcherItem } from '../../models/searcherItem';
 export class SearcherComponent<type extends SearcherItem> {
   showOptions = signal(false);
   placeholder = input('Enter a country name...');
+  searchValue = signal('');
   onKeyUp = output<string>();
   items = input<type[]>([]);
   selected = output<type>();
 
   selectedItem(item: type) {
+    this.searchValue.set(item.name);
     this.selected.emit(item);
     this.showOptions.set(false);
   }
