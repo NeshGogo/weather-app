@@ -2,10 +2,10 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 WORKDIR /app
 
-COPY *.csproj ./
+COPY ["weather-api/WeatherApi/*.csproj", "./"] 
 RUN dotnet restore
 
-COPY . ./
+COPY  ["weather-api/WeatherApi/", "./"] 
 
 RUN dotnet publish -c Release -o /publish
 

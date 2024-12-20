@@ -1,0 +1,16 @@
+services:
+  weather-api:
+    container_name: weather-api
+    build:
+      context: .
+      dockerfile: ./weather-api/WeatherApi/Dockerfile
+    ports:
+      - "8010:8080"
+    environment:
+      - "ASPNETCORE_ENVIRONMENT=Development"
+
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
