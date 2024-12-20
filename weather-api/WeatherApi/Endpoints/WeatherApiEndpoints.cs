@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WeatherApi.ApiModels;
+using WeatherApi.Infrastructure.Redis;
 using WeatherApi.Infrastructure.WeatherService;
+using WeatherApi.Models;
 
 namespace WeatherApi.Endpoints;
 
@@ -31,6 +33,30 @@ public static class WeatherApiEndpoints
                 weather.Current.Summary,
                 hourly,
                 daily);
+        });
+
+        endpoint.MapPost("/Places", async ([FromBody] CreatePlaceRequest request, IRedisStore store) =>
+        {
+            var place = new Place()
+            {
+                Id = request.Id,
+                Name = request.Name,
+            };
+
+            await store.CreatePlace(place);
+            return Results.Created($"/MyPlaces/{place.Id}", place);
+        });
+
+        endpoint.MapGet("/MyPlaces/{id}", async (string id, IRedisStore store) =>
+        {
+            var place = await store.GetPlace(id);
+            return Results.Ok(place);
+        });
+
+        endpoint.MapGet("/MyPlaces", async (IRedisStore store) =>
+        {
+            var places = await store.GetPlaces();
+            return Results.Ok(places);
         });
     }
 }

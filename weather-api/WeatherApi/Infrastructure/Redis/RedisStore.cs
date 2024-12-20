@@ -23,6 +23,12 @@ public class RedisStore : IRedisStore
         await _cache.SetStringAsync(CacheKey, serializedPlaces);
     }
 
+    public async Task<Place> GetPlace(string id)
+    {
+        var places = await GetPlaces();
+        return places.FirstOrDefault(p => p.Id == id);
+    }
+
     public async Task<IEnumerable<Place>> GetPlaces()
     {
         var cachedPlaces = await _cache.GetStringAsync(CacheKey);
