@@ -13,6 +13,7 @@ export class LayoutComponent {
   isAFavoritePlace = input(false);
   thereisAPlace = input(false);
   favorite = output<boolean>();
+  showFavoriteList = output<boolean>();
 
   toggleFavoritePlace() {
     this.favorite.emit(!this.isAFavoritePlace());

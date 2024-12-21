@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
   isAFavoritePlace = signal(false);
   thereisAPlace = signal(false);
   favoritePlaces = signal<Place[]>([]);
-  showDrawer = signal(true);
+  showDrawer = signal(false);
 
   ngOnInit(): void {
     this.fetchFavoritePlaces();
@@ -105,5 +105,9 @@ export class HomeComponent implements OnInit {
 
   closeDrawer() {
     this.showDrawer.set(false);
+  }
+
+  openDrawer() {
+    this.showDrawer.set(true);
   }
 }
