@@ -30,6 +30,8 @@ export class HomeComponent {
   place = signal<Place | null>(null);
   weather = signal<Weather | null>(null);
   unit = signal('C');
+  isAFavoritePlace = signal(false);
+  thereisAPlace = signal(false);
 
   fetchPlace(text: string) {
     this.weatherService
@@ -43,6 +45,7 @@ export class HomeComponent {
   selectPlace(place: Place) {
     this.place.set(place);
     this.fetchWeather();
+    this.thereisAPlace.set(true);
   }
 
   fetchWeather() {

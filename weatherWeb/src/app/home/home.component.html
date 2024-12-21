@@ -1,6 +1,11 @@
-<app-layout (unitChange)="handleUnitChange($event)">
+<app-layout
+  (unitChange)="handleUnitChange($event)"
+  [thereisAPlace]="thereisAPlace()"
+  [isAFavoritePlace]="isAFavoritePlace()"
+>
   <div class="mt-2">
     <app-searcher
+      class="w-full"
       (onKeyUp)="fetchPlace($event)"
       [items]="places()"
       (selected)="selectPlace($event)"
@@ -14,6 +19,7 @@
       <app-skeleton />
     </div>
     } @if (!loading() && place() && weather()) {
+
     <app-summary-section
       [name]="place()?.name"
       [precipitation]="weather()?.precipitation"
