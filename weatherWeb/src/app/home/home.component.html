@@ -49,5 +49,6 @@
   <app-favorite-places
     [places]="favoritePlaces()"
     (select)="selectPlace($event)"
+    (remove)="removeFavoritePlace($event)"
   ></app-favorite-places>
 </app-drawer>

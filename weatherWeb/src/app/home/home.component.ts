@@ -9,7 +9,7 @@ import { AirConditionSectionComponent } from '../components/air-condition-sectio
 import { WeatherProgressViewComponent } from '../components/weather-progress-view/weather-progress-view.component';
 import { SummarySectionComponent } from '../components/summary-section/summary-section.component';
 import { SkeletonComponent } from '../components/skeleton/skeleton.component';
-import { DrawerComponent } from "../components/drawer/drawer.component";
+import { DrawerComponent } from '../components/drawer/drawer.component';
 import { FavoritePlacesComponent } from '../components/favorite-places/favorite-places.component';
 
 @Component({
@@ -23,7 +23,7 @@ import { FavoritePlacesComponent } from '../components/favorite-places/favorite-
     SkeletonComponent,
     DrawerComponent,
     FavoritePlacesComponent,
-],
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -41,7 +41,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchFavoritePlaces();
-    this.favoritePlaces().length > 0 && this.selectPlace(this.favoritePlaces()[0]);
+    this.favoritePlaces().length > 0 &&
+      this.selectPlace(this.favoritePlaces()[0]);
   }
 
   fetchPlace(text: string) {
@@ -54,8 +55,7 @@ export class HomeComponent implements OnInit {
   }
 
   selectPlace(place: Place, hideDrawer = false) {
-    if(hideDrawer)
-      this.closeDrawer();
+    if (hideDrawer) this.closeDrawer();
 
     this.place.set(place);
     this.fetchWeather();
@@ -96,9 +96,17 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  removeFavoritePlace(place: Place | null = null) {
+    const removePlace = place || this.place();
+    this.weatherService.removeFavorite(<Place>removePlace).subscribe(() => {
+      this.fetchFavoritePlaces();
+      this.isAFavoritePlace.set(false);
+    });
+  }
+
   toggleFavoritePlace() {
     if (this.isAFavoritePlace()) {
-      // TODO: Implement removeFavoritePlace
+      this.removeFavoritePlace();
     } else {
       this.addFavoritePlace();
     }

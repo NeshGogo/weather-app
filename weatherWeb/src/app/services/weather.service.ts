@@ -23,10 +23,14 @@ export class WeatherService {
   }
 
   addFavorite(place: Place) {
-    return this.http.post(`${environment.api}/places`, place);
+    return this.http.post(`${environment.api}/MyPlaces`, place);
   }
 
   getFavoritePlaces() {
     return this.http.get<Place[]>(`${environment.api}/MyPlaces`);
+  }
+
+  removeFavorite(place: Place) {
+    return this.http.delete(`${environment.api}/MyPlaces/${place.id}`);
   }
 }
