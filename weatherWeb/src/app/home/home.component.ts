@@ -52,7 +52,10 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  selectPlace(place: Place) {
+  selectPlace(place: Place, hideDrawer = false) {
+    if(hideDrawer)
+      this.closeDrawer();
+
     this.place.set(place);
     this.fetchWeather();
     this.thereisAPlace.set(true);

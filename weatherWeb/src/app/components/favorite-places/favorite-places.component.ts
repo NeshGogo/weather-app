@@ -7,7 +7,7 @@ import { Place } from '../../models/place';
   template: `
     @for (place of places(); track $index) {
     <div
-      class="cursor-pointer shadow dark:shadow-indigo-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-indigo-950 dark:border-indigo-800"
+      class="mb-2 cursor-pointer shadow dark:shadow-indigo-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-indigo-950 dark:border-indigo-800"
       (click)="select.emit(place)"
     >
       <h2

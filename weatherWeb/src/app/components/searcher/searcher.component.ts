@@ -1,5 +1,6 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, input, OnInit, output, signal } from '@angular/core';
 import { SearcherItem } from '../../models/searcherItem';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-searcher',
@@ -7,13 +8,22 @@ import { SearcherItem } from '../../models/searcherItem';
   templateUrl: './searcher.component.html',
   styles: '',
 })
-export class SearcherComponent<type extends SearcherItem> {
+export class SearcherComponent<type extends SearcherItem> implements OnInit {
   showOptions = signal(false);
   placeholder = input('Enter a country name...');
   searchValue = signal('');
   onKeyUp = output<string>();
   items = input<type[]>([]);
   selected = output<type>();
+  private searchTerms = new Subject<string>();
+
+  ngOnInit(): void {
+    this.searchTerms
+      .pipe(debounceTime(500), distinctUntilChanged(),)
+      .subscribe((text) => {
+        this.onKeyUp.emit(text);
+      });
+  }
 
   selectedItem(item: type) {
     this.searchValue.set(item.name);
@@ -23,7 +33,7 @@ export class SearcherComponent<type extends SearcherItem> {
 
   searchItem(ev: any) {
     ev.preventDefault();
-    this.onKeyUp.emit(ev.target.value);
+    this.searchTerms.next(ev.target.value);
   }
 
   hideResults() {
