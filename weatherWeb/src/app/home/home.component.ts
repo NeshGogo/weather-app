@@ -10,6 +10,7 @@ import { WeatherProgressViewComponent } from '../components/weather-progress-vie
 import { SummarySectionComponent } from '../components/summary-section/summary-section.component';
 import { SkeletonComponent } from '../components/skeleton/skeleton.component';
 import { DrawerComponent } from "../components/drawer/drawer.component";
+import { FavoritePlacesComponent } from '../components/favorite-places/favorite-places.component';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,8 @@ import { DrawerComponent } from "../components/drawer/drawer.component";
     WeatherProgressViewComponent,
     SummarySectionComponent,
     SkeletonComponent,
-    DrawerComponent
+    DrawerComponent,
+    FavoritePlacesComponent,
 ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',

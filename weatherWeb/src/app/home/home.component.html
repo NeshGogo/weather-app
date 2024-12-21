@@ -44,4 +44,9 @@
   </div>
 </app-layout>
 
-<app-drawer title="Favorite places" [show]="showDrawer()" (close)="closeDrawer()"></app-drawer>
+<app-drawer title="Favorite places" [show]="showDrawer()" (close)="closeDrawer()">
+  <app-favorite-places
+    [places]="favoritePlaces()"
+    (select)="selectPlace($event)"
+  ></app-favorite-places>
+</app-drawer>
