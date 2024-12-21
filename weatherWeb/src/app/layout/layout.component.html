@@ -1,11 +1,16 @@
 <main class="p-2">
   <section class="flex justify-between items-center">
     <div class="flex items-center">
+      @defer () {
       <app-dark-mode-toggle class="mr-2"></app-dark-mode-toggle>
-      <app-unit-toggle (unitChange)="unitChange.emit($event)"></app-unit-toggle>
+      <app-unit-toggle
+        class="-mt-1"
+        (unitChange)="unitChange.emit($event)"
+      ></app-unit-toggle>
+
       @if(thereisAPlace()) {
       <button
-        class="ml-2"
+        class="-mt-2 ml-2"
         (click)="toggleFavoritePlace()"
         title="Toggle favorite place"
       >
@@ -42,7 +47,7 @@
 
         }
       </button>
-      }
+      } }
     </div>
 
     <button title="favorite places" (click)="showFavoriteList.emit(true)">
