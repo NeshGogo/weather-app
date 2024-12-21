@@ -9,6 +9,7 @@ import { AirConditionSectionComponent } from '../components/air-condition-sectio
 import { WeatherProgressViewComponent } from '../components/weather-progress-view/weather-progress-view.component';
 import { SummarySectionComponent } from '../components/summary-section/summary-section.component';
 import { SkeletonComponent } from '../components/skeleton/skeleton.component';
+import { DrawerComponent } from "../components/drawer/drawer.component";
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,8 @@ import { SkeletonComponent } from '../components/skeleton/skeleton.component';
     WeatherProgressViewComponent,
     SummarySectionComponent,
     SkeletonComponent,
-  ],
+    DrawerComponent
+],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -33,6 +35,7 @@ export class HomeComponent implements OnInit {
   isAFavoritePlace = signal(false);
   thereisAPlace = signal(false);
   favoritePlaces = signal<Place[]>([]);
+  showDrawer = signal(true);
 
   ngOnInit(): void {
     this.fetchFavoritePlaces();
@@ -93,5 +96,9 @@ export class HomeComponent implements OnInit {
     } else {
       this.addFavoritePlace();
     }
+  }
+
+  closeDrawer() {
+    this.showDrawer.set(false);
   }
 }

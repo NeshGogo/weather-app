@@ -3,7 +3,7 @@
     <app-dark-mode-toggle class="mr-2"></app-dark-mode-toggle>
     <app-unit-toggle (unitChange)="unitChange.emit($event)"></app-unit-toggle>
     @if(thereisAPlace()) {
-    <button class="ml-2" (click)="toggleFavoritePlace()">
+    <button class="ml-2" (click)="toggleFavoritePlace()" title="Toggle favorite place">
       @if (isAFavoritePlace()) {
       <svg
         class="w-6 h-6 text-gray-800 dark:text-white"
