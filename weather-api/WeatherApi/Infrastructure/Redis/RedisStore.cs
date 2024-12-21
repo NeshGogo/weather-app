@@ -42,9 +42,12 @@ public class RedisStore : IRedisStore
 
     public async Task RemovePlace(string id)
     {
-        var places = await GetPlaces();
-        places.ToList().RemoveAll(p => p.Id == id);
+        var places = (await GetPlaces()).ToList();
+        Console.WriteLine("--> Count init {0}", places.Count());
+        
+        places.RemoveAll(p => p.Id == id);
 
+        Console.WriteLine("--> Count after remove {0}", places.Count());
         var serializedPlaces = JsonSerializer.Serialize(places);
 
         await _cache.SetStringAsync(CacheKey, serializedPlaces);

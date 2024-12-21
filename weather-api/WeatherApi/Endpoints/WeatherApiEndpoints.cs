@@ -35,7 +35,7 @@ public static class WeatherApiEndpoints
                 daily);
         });
 
-        endpoint.MapPost("/Places", async ([FromBody] CreatePlaceRequest request, IRedisStore store) =>
+        endpoint.MapPost("/MyPlaces", async ([FromBody] CreatePlaceRequest request, IRedisStore store) =>
         {
             var place = new Place()
             {
@@ -57,6 +57,12 @@ public static class WeatherApiEndpoints
         {
             var places = await store.GetPlaces();
             return Results.Ok(places);
+        });
+
+        endpoint.MapDelete("/MyPlaces/{id}", async (string id, IRedisStore store) =>
+        {
+            await store.RemovePlace(id);
+            return TypedResults.NoContent();
         });
     }
 }
