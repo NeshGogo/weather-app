@@ -21,4 +21,12 @@ export class WeatherService {
       `${environment.api}/places?searchTerm=${text}`
     );
   }
+
+  addFavorite(place: Place) {
+    return this.http.post(`${environment.api}/places`, place);
+  }
+
+  getFavoritePlaces() {
+    return this.http.get<Place[]>(`${environment.api}/MyPlaces`);
+  }
 }

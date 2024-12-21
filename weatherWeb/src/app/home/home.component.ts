@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { LayoutComponent } from '../layout/layout.component';
 import { SearcherComponent } from '../components/searcher/searcher.component';
 import { WeatherService } from '../services/weather.service';
@@ -23,7 +23,7 @@ import { SkeletonComponent } from '../components/skeleton/skeleton.component';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   private readonly weatherService = inject(WeatherService);
   loading = signal(false);
   places = signal<Place[]>([]);
@@ -32,6 +32,11 @@ export class HomeComponent {
   unit = signal('C');
   isAFavoritePlace = signal(false);
   thereisAPlace = signal(false);
+  favoritePlaces = signal<Place[]>([]);
+
+  ngOnInit(): void {
+    this.fetchFavoritePlaces();
+  }
 
   fetchPlace(text: string) {
     this.weatherService
@@ -46,6 +51,9 @@ export class HomeComponent {
     this.place.set(place);
     this.fetchWeather();
     this.thereisAPlace.set(true);
+    this.isAFavoritePlace.set(
+      this.favoritePlaces().some((p) => p.id === place.id)
+    );
   }
 
   fetchWeather() {
@@ -63,6 +71,27 @@ export class HomeComponent {
     this.unit.set(unit);
     if (this.place()) {
       this.fetchWeather();
+    }
+  }
+
+  fetchFavoritePlaces() {
+    this.weatherService.getFavoritePlaces().subscribe((places) => {
+      this.favoritePlaces.set(places);
+    });
+  }
+
+  addFavoritePlace() {
+    this.weatherService.addFavorite(<Place>this.place()).subscribe(() => {
+      this.fetchFavoritePlaces();
+      this.isAFavoritePlace.set(true);
+    });
+  }
+
+  toggleFavoritePlace() {
+    if (this.isAFavoritePlace()) {
+      // TODO: Implement removeFavoritePlace
+    } else {
+      this.addFavoritePlace();
     }
   }
 }

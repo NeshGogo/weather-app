@@ -2,6 +2,7 @@
   (unitChange)="handleUnitChange($event)"
   [thereisAPlace]="thereisAPlace()"
   [isAFavoritePlace]="isAFavoritePlace()"
+  (favorite)="toggleFavoritePlace()"
 >
   <div class="mt-2">
     <app-searcher
