@@ -41,6 +41,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchFavoritePlaces();
+    this.favoritePlaces().length > 0 && this.selectPlace(this.favoritePlaces()[0]);
   }
 
   fetchPlace(text: string) {
