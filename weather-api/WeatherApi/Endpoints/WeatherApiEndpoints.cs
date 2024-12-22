@@ -24,7 +24,7 @@ public static class WeatherApiEndpoints
             var weather = await service.GetWeather(placeId, units, options.Key);
 
             var hourly = weather.hourly.Data.Select(p => new Progression($"{p.Date.Hour}:00", p.Icon, $"{Math.Round(p.Temperature)}°"));
-            var daily = weather.daily.Data.Select(p => 
+            var daily = weather.daily.Data.Select(p =>
                 new Progression(p.Day.DayOfWeek.ToString(), p.Icon, $"{Math.Round(p.All_day.Temperature_max)}/{Math.Round(p.All_day.Temperature_min)}"));
 
             return new GetWeatherResponse(
@@ -67,21 +67,23 @@ public static class WeatherApiEndpoints
             return TypedResults.NoContent();
         });
 
-        endpoint.MapGet("/WeatherSumarry/{id}", async (string id, [FromQuery] string units, 
-            IWeatherService weatherService, IGeminiService geminiService, WeatherOptions weatherOptions, 
+        endpoint.MapGet("/WeatherSumarry/{id}", async (string id, [FromQuery] string units,
+            IWeatherService weatherService, IGeminiService geminiService, WeatherOptions weatherOptions,
             GeminiOptions geminiOptions) =>
         {
             var weather = await weatherService.GetWeather(id, units, weatherOptions.Key);
             string weatherJson = JsonSerializer.Serialize(weather);
 
-            var prompt = $"Using the follwing weather condition generate a medium recomendation for today: {weatherJson}";
+            var prompt = "Considering the following weather conditions, suggest an activity for today. " +
+            "Please keep the response to a moderate length, providing enough detail " +
+            $"to be helpful but not overly verbose. Here is the weather details: {weatherJson}";
 
             var body = new GeminiRequestBody([
                     new GeminiContent([
                         new GeminiPart(prompt)
                         ])
                 ]);
-            
+
             var geminiResponse = await geminiService.TextGeneration(body, geminiOptions.Model, geminiOptions.Key);
 
             var summary = geminiResponse.Candidates.First().Content.Parts.First().Text;
