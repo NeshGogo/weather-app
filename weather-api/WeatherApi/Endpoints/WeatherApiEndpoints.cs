@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 using WeatherApi.ApiModels;
+using WeatherApi.Infrastructure.GeminiServices;
 using WeatherApi.Infrastructure.Redis;
 using WeatherApi.Infrastructure.WeatherService;
 using WeatherApi.Models;
@@ -63,6 +65,27 @@ public static class WeatherApiEndpoints
         {
             await store.RemovePlace(id);
             return TypedResults.NoContent();
+        });
+
+        endpoint.MapGet("/WeatherSumarry/{id}", async (string id, [FromQuery] string units, 
+            IWeatherService weatherService, IGeminiService geminiService, WeatherOptions weatherOptions, 
+            GeminiOptions geminiOptions) =>
+        {
+            var weather = await weatherService.GetWeather(id, units, weatherOptions.Key);
+            string weatherJson = JsonSerializer.Serialize(weather);
+
+            var prompt = $"Using the follwing weather condition generate a medium recomendation for today: {weatherJson}";
+
+            var body = new GeminiRequestBody([
+                    new GeminiContent([
+                        new GeminiPart(prompt)
+                        ])
+                ]);
+            
+            var geminiResponse = await geminiService.TextGeneration(body, geminiOptions.Model, geminiOptions.Key);
+
+            var summary = geminiResponse.Candidates.First().Content.Parts.First().Text;
+            return TypedResults.Ok(summary);
         });
     }
 }
