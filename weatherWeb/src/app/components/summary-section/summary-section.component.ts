@@ -32,8 +32,8 @@ import { SkeletonComponent } from "../skeleton/skeleton.component";
           />
         </div>
       </div>
-      <p class="text-gray-600 dark:text-gray-300">AI-Powered Recommendations:</p>
-      @if (recommendations()) {
+      <p class="font-bold text-gray-600 dark:text-gray-300">AI-Powered Recommendations:</p>
+      @if (!loadingRecomendations()) {
         <p class="text-gray-600 dark:text-gray-300">{{ recommendations() }}</p>
       } @else {
         <app-skeleton></app-skeleton>
@@ -47,5 +47,6 @@ export class SummarySectionComponent {
   temperature = input<number>();
   icon = input<number>();
   summary = input<string>();
-  recommendations = input<string>();
+  recommendations = input<string | null>();
+  loadingRecomendations = input<boolean>();
 }

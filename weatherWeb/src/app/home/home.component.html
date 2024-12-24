@@ -28,6 +28,8 @@
       [temperature]="weather()?.temperature"
       [icon]="weather()?.icon"
       [summary]="weather()?.summary"
+      [recommendations]="recommendations()"
+      [loadingRecomendations]="loadingRecomendations()"
     />
 
     <app-air-condition-section [unit]="unit()" [weather]="weather()" />

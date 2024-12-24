@@ -38,6 +38,8 @@ export class HomeComponent implements OnInit {
   thereisAPlace = signal(false);
   favoritePlaces = signal<Place[]>([]);
   showDrawer = signal(false);
+  recommendations = signal<string | null>(null);
+  loadingRecomendations = signal(false);
 
   ngOnInit(): void {
     this.fetchFavoritePlaces();
@@ -56,13 +58,13 @@ export class HomeComponent implements OnInit {
 
   selectPlace(place: Place, hideDrawer = false) {
     if (hideDrawer) this.closeDrawer();
-
     this.place.set(place);
     this.fetchWeather();
     this.thereisAPlace.set(true);
     this.isAFavoritePlace.set(
       this.favoritePlaces().some((p) => p.id === place.id)
     );
+    this.fetchRecommendations();
   }
 
   fetchWeather() {
@@ -73,6 +75,18 @@ export class HomeComponent implements OnInit {
       .subscribe((weather) => {
         this.weather.set(weather);
         this.loading.set(false);
+      });
+  }
+
+  fetchRecommendations() {
+    this.loadingRecomendations.set(true);
+    const units = this.unit() === 'C' ? 'metric' : 'us';
+    this.weatherService
+      .getRecomendations(<string>this.place()?.id, units)
+      .subscribe((recomendation) => {
+        this.recommendations.set(recomendation);
+        console.log(recomendation);
+        this.loadingRecomendations.set(false);
       });
   }
 

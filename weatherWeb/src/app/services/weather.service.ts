@@ -34,9 +34,9 @@ export class WeatherService {
     return this.http.delete(`${environment.api}/MyPlaces/${place.id}`);
   }
 
-  getRecomendations(placeId: string) {
+  getRecomendations(placeId: string, units: string) {
     return this.http.get<string>(
-      `${environment.api}/WeatherSumarry/${placeId}`
+      `${environment.api}/WeatherSumarry/${placeId}?units=${units}`
     );
   }
 }
