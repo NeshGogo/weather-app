@@ -33,4 +33,10 @@ export class WeatherService {
   removeFavorite(place: Place) {
     return this.http.delete(`${environment.api}/MyPlaces/${place.id}`);
   }
+
+  getRecomendations(placeId: string) {
+    return this.http.get<string>(
+      `${environment.api}/WeatherSumarry/${placeId}`
+    );
+  }
 }
