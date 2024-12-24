@@ -74,7 +74,7 @@ public static class WeatherApiEndpoints
             var weather = await weatherService.GetWeather(id, units, weatherOptions.Key);
             string weatherJson = JsonSerializer.Serialize(weather);
 
-            var prompt = "Considering the following weather conditions, suggest an activity for today. " +
+            var prompt = $"Considering the following weather conditions, suggest an activity for today in {id}. " +
             "Please keep the response to a moderate length, providing enough detail " +
             $"to be helpful but not overly verbose and don't use markdown. Here is the weather details: {weatherJson}";
 
