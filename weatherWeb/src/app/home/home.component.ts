@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { LayoutComponent } from '../layout/layout.component';
 import { SearcherComponent } from '../components/searcher/searcher.component';
 import { WeatherService } from '../services/weather.service';
@@ -11,6 +11,7 @@ import { SummarySectionComponent } from '../components/summary-section/summary-s
 import { SkeletonComponent } from '../components/skeleton/skeleton.component';
 import { DrawerComponent } from '../components/drawer/drawer.component';
 import { FavoritePlacesComponent } from '../components/favorite-places/favorite-places.component';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -29,6 +30,7 @@ import { FavoritePlacesComponent } from '../components/favorite-places/favorite-
 })
 export class HomeComponent implements OnInit {
   private readonly weatherService = inject(WeatherService);
+  private readonly platformId = inject(PLATFORM_ID);
   loading = signal(false);
   places = signal<Place[]>([]);
   place = signal<Place | null>(null);
@@ -40,11 +42,15 @@ export class HomeComponent implements OnInit {
   showDrawer = signal(false);
   recommendations = signal<string | null>(null);
   loadingRecomendations = signal(false);
+  voices = signal<SpeechSynthesisVoice[]>([]);
 
   ngOnInit(): void {
     this.fetchFavoritePlaces();
     this.favoritePlaces().length > 0 &&
       this.selectPlace(this.favoritePlaces()[0]);
+    if (isPlatformBrowser(this.platformId)) {
+      this.getVoices();
+    }
   }
 
   fetchPlace(text: string) {
@@ -85,7 +91,6 @@ export class HomeComponent implements OnInit {
       .getRecomendations(<string>this.place()?.id, units)
       .subscribe((recomendation) => {
         this.recommendations.set(recomendation);
-        console.log(recomendation);
         this.loadingRecomendations.set(false);
       });
   }
@@ -132,5 +137,31 @@ export class HomeComponent implements OnInit {
 
   openDrawer() {
     this.showDrawer.set(true);
+  }
+
+  speak() {
+    const synth = window.speechSynthesis;
+    const enVoices = this.voices().filter((voice) => voice.lang === 'en-US');
+    const voice = enVoices[0];
+    const text = `The weather in ${this.place()?.name} is ${
+      this.weather()?.summary
+    } and the temperature is ${
+      this.weather()?.temperature
+    } degrees. The recomendations for today: ${this.recommendations()}`;
+    const utterThis = new SpeechSynthesisUtterance(text);
+    utterThis.voice = voice;
+    synth.speak(utterThis);
+  }
+
+  getVoices() {
+    let voices = speechSynthesis.getVoices();
+    if (voices.length !== 0) {
+      this.voices.set(voices);
+    } else {
+      speechSynthesis.onvoiceschanged = () => {
+        voices = speechSynthesis.getVoices();
+        this.voices.set(voices);
+      };
+    }
   }
 }
