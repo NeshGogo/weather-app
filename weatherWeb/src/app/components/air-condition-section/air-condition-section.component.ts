@@ -15,7 +15,7 @@ import { Weather } from '../../models/weather';
       </h1>
       <div class="sm:grid sm:grid-cols-2 sm:gap-4">
         <div
-          class="mb-2 flex justify-between  shadow dark:shadow-blue-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-blue-950 dark:border-blue-950"
+          class="mb-2 flex justify-between shadow dark:shadow-blue-700 w-full p-3 bg-white border border-gray-200 rounded-lg dark:bg-blue-950 dark:border-blue-950"
         >
           <div>
             <p class="mb-3 text-gray-500 dark:text-gray-400">Real Feel</p>
@@ -24,7 +24,7 @@ import { Weather } from '../../models/weather';
             </p>
           </div>
           <img
-            src="assets/icons/small/{{ weather()?.icon }}.png"
+            src="assets/icons/medium/{{ weather()?.icon }}.png"
             [alt]="weather()?.summary"
           />
         </div>
