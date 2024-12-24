@@ -76,7 +76,7 @@ public static class WeatherApiEndpoints
 
             var prompt = "Considering the following weather conditions, suggest an activity for today. " +
             "Please keep the response to a moderate length, providing enough detail " +
-            $"to be helpful but not overly verbose. Here is the weather details: {weatherJson}";
+            $"to be helpful but not overly verbose and don't use markdown. Here is the weather details: {weatherJson}";
 
             var body = new GeminiRequestBody([
                     new GeminiContent([
