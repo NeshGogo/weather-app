@@ -5,6 +5,8 @@
   (favorite)="toggleFavoritePlace()"
   (showFavoriteList)="openDrawer()"
   (listenToWeather)="speak()"
+  [isPlaying]="isPlaying()"
+  (stopToListen)="stopListening()"
 >
   <div class="mt-2">
     <app-searcher

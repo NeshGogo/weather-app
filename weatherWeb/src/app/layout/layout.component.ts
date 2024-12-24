@@ -15,6 +15,8 @@ export class LayoutComponent {
   favorite = output<boolean>();
   showFavoriteList = output<boolean>();
   listenToWeather = output<void>();
+  isPlaying = input(false);
+  stopToListen = output<void>();
 
   toggleFavoritePlace() {
     this.favorite.emit(!this.isAFavoritePlace());

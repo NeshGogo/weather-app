@@ -43,6 +43,7 @@ export class HomeComponent implements OnInit {
   recommendations = signal<string | null>(null);
   loadingRecomendations = signal(false);
   voices = signal<SpeechSynthesisVoice[]>([]);
+  isPlaying = signal(false);
 
   ngOnInit(): void {
     this.fetchFavoritePlaces();
@@ -150,7 +151,11 @@ export class HomeComponent implements OnInit {
     } degrees. The recomendations for today: ${this.recommendations()}`;
     const utterThis = new SpeechSynthesisUtterance(text);
     utterThis.voice = voice;
+    utterThis.onend = () => {
+      this.isPlaying.set(false);
+    };
     synth.speak(utterThis);
+    this.isPlaying.set(true);
   }
 
   getVoices() {
@@ -163,5 +168,10 @@ export class HomeComponent implements OnInit {
         this.voices.set(voices);
       };
     }
+  }
+
+  stopListening() {
+    speechSynthesis.cancel();
+    this.isPlaying.set(false);
   }
 }
