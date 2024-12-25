@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SearcherComponent } from './searcher.component';
+import { Place } from '../../models/place';
 
 describe('SearcherComponent', () => {
-  let component: SearcherComponent;
-  let fixture: ComponentFixture<SearcherComponent>;
+  let component: SearcherComponent<Place>;
+  let fixture: ComponentFixture<SearcherComponent<Place>>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

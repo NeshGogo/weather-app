@@ -11,24 +11,11 @@ describe('WeatherService', () => {
   let places: Place[] = [
     {
       name: 'Shantou',
-      place_id: 'shantou',
-      adm_area1: 'Guangdong',
-      country: 'China',
-      lat: '23.36814N',
-      lon: '116.71479E',
-      timezone: 'Asia/Shanghai',
-      type: 'settlement',
+      id: 'shantou',
     },
     {
       name: 'Santo Domingo',
-      place_id: 'santo-domingo',
-      adm_area1: 'Nacional',
-      adm_area2: 'Santo Domingo De Guzmán',
-      country: 'Dominican Republic',
-      lat: '18.47186N',
-      lon: '69.89232W',
-      timezone: 'America/Santo_Domingo',
-      type: 'settlement',
+      id: 'santo-domingo',
     },
   ];
 
