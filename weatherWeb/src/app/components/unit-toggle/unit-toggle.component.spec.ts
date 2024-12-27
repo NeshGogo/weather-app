@@ -20,4 +20,27 @@ describe('UnitToggleComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have a unitChange output', () => {
+    expect(component.unitChange).toBeTruthy();
+  });
+
+  it('should have a isCelsius signal', () => {
+    expect(component.isCelsius).toBeTruthy();
+  });
+
+  it('should have a unitHandler method', () => {
+    expect(component.unitHandler).toBeTruthy();
+  });
+
+  it('should toggle the unit', () => {
+    component.unitHandler();
+    expect(component.isCelsius()).toBe(false);
+  });
+
+  it('should emit the unit', () => {
+    spyOn(component.unitChange, 'emit');
+    component.unitHandler();
+    expect(component.unitChange.emit).toHaveBeenCalledWith('F');
+  });
 });
