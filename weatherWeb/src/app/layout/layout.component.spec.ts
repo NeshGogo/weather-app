@@ -49,8 +49,8 @@ describe('LayoutComponent', () => {
   });
 
   it('should show favorite list', (done) => {
-    component.showFavoriteList.subscribe(async () => {
-      fixture.componentRef.setInput('thereisAPlace', true);
+    component.showFavoriteList.subscribe(async (value) => {
+      fixture.componentRef.setInput('thereisAPlace', value);
       fixture.detectChanges();
       await fixture.whenStable();
       done();
