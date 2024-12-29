@@ -1,6 +1,11 @@
-﻿using NSubstitute;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using NSubstitute;
 using WeatherApi.Endpoints;
+using WeatherApi.Infrastructure.Redis;
 using WeatherApi.Infrastructure.WeatherService;
+using WeatherApi.Models;
 
 namespace WeatherApi.Test.Endpoints;
 
@@ -8,12 +13,14 @@ public class WeatherApiTest
 {
     private readonly IWeatherService _weatherService;
     private readonly WeatherOptions _weatherOptions;
+    private readonly IRedisStore _redisStore;
 
     public WeatherApiTest()
     {
         _weatherService = Substitute.For<IWeatherService>();
         _weatherOptions = new WeatherOptions();
         _weatherOptions.Key = Guid.NewGuid().ToString();
+        _redisStore = Substitute.For<IRedisStore>();
     }
 
     [Fact]
@@ -106,5 +113,37 @@ public class WeatherApiTest
         var result = await WeatherApiEndpoints.GetWeather("santo-domingo", "metric", _weatherService, _weatherOptions);
 
         Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task ShouldGetMyPlaces_WhenThereArePlacesStored()
+    {
+        IEnumerable<Place> places = [
+            new Place { Id= "santo-domingo-este", Name="Santo Domingo Este"},
+            new Place{Id="santo-domingo-norte", Name= "Santo Domingo Norte" },
+            new Place{Id="santo-domingo", Name = "Santo Domingo"},
+        ];
+
+        _redisStore.GetPlaces().Returns(places);
+
+        var response = await WeatherApiEndpoints.GetMyPlaces(_redisStore);
+
+        Assert.NotNull(response);
+        var result = response as IValueHttpResult;
+        var placesResult = result.Value as IEnumerable<Place>;
+        Assert.Equal(3, placesResult.Count());
+    }
+
+    [Fact]
+    public async Task ShouldReturnEmptyPlaces_WhenThereAreNotPlacesStored()
+    {
+        _redisStore.GetPlaces().Returns([]);
+
+        var response = await WeatherApiEndpoints.GetMyPlaces(_redisStore);
+
+        Assert.NotNull(response);
+        var result = response as IValueHttpResult;
+        var placesResult = result.Value as IEnumerable<Place>;
+        Assert.Empty(placesResult);
     }
 }
