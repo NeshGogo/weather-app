@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using WeatherApi.ApiModels;
 using WeatherApi.Endpoints;
 using WeatherApi.Infrastructure.Redis;
 using WeatherApi.Infrastructure.WeatherService;
@@ -145,5 +146,33 @@ public class WeatherApiTest
         var result = response as IValueHttpResult;
         var placesResult = result.Value as IEnumerable<Place>;
         Assert.Empty(placesResult);
+    }
+
+    [Fact]
+    public async Task ShouldCreatePlace_WhenPlaceIsNotStored()
+    {
+        var place = new CreatePlaceRequest("santo-domingo-este", "Santo Domingo Este");
+
+        var response = await WeatherApiEndpoints.AddMyPlace(place, _redisStore);
+
+        Assert.NotNull(response);
+        Assert.IsType<Created<Place>>(response);
+        var result = response as Created<Place>;
+       
+        Assert.Equal(place.Name, result.Value.Name);
+        Assert.Equal(place.Id, result.Value.Id);
+    }
+
+    [Fact]
+    public async Task ShouldDeletePlace_WhenPlaceIsStored()
+    {
+        var place = new Place { Id = "santo-domingo-este", Name = "Santo Domingo Este" };
+
+        _redisStore.GetPlace(place.Id).Returns(place);
+
+        var response = await WeatherApiEndpoints.DeleteMyPlace(place.Id, _redisStore);
+
+        Assert.NotNull(response);
+        Assert.IsType<NoContent>(response);
     }
 }
