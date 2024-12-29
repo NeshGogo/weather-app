@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using System.Text.Json;
 using WeatherApi.ApiModels;
 using WeatherApi.Endpoints;
+using WeatherApi.Infrastructure.GeminiServices;
 using WeatherApi.Infrastructure.Redis;
 using WeatherApi.Infrastructure.WeatherService;
 using WeatherApi.Models;
@@ -15,6 +17,8 @@ public class WeatherApiTest
     private readonly IWeatherService _weatherService;
     private readonly WeatherOptions _weatherOptions;
     private readonly IRedisStore _redisStore;
+    private readonly IGeminiService _geminiService;
+    private readonly GeminiOptions _geminiOptions;
 
     public WeatherApiTest()
     {
@@ -22,6 +26,8 @@ public class WeatherApiTest
         _weatherOptions = new WeatherOptions();
         _weatherOptions.Key = Guid.NewGuid().ToString();
         _redisStore = Substitute.For<IRedisStore>();
+        _geminiService = Substitute.For<IGeminiService>();
+        _geminiOptions = new GeminiOptions();
     }
 
     [Fact]
@@ -158,7 +164,7 @@ public class WeatherApiTest
         Assert.NotNull(response);
         Assert.IsType<Created<Place>>(response);
         var result = response as Created<Place>;
-       
+
         Assert.Equal(place.Name, result.Value.Name);
         Assert.Equal(place.Id, result.Value.Id);
     }
@@ -174,5 +180,90 @@ public class WeatherApiTest
 
         Assert.NotNull(response);
         Assert.IsType<NoContent>(response);
+    }
+
+    [Fact]
+    public async Task ShouldGetAPlace_WhenPlaceIdMatch()
+    {
+        var place = new Place { Id = "santo-domingo-este", Name = "Santo Domingo Este" };
+
+        _redisStore.GetPlace(place.Id).Returns(place);
+
+        var response = await WeatherApiEndpoints.GetMyPlace(place.Id, _redisStore);
+
+        Assert.NotNull(response);
+        Assert.IsType<Ok<Place>>(response);
+        var result = response as Ok<Place>;
+        Assert.Equal(place.Name, result.Value.Name);
+        Assert.Equal(place.Id, result.Value.Id);
+    }
+
+    [Fact]
+    public async Task ShouldNotGetAPLace_WhenPlaceIdNotMatch()
+    {
+        var place = new Place { Id = "santo-domingo-este", Name = "Santo Domingo Este" };
+
+        _redisStore.GetPlace(place.Id).Returns(place);
+
+        var response = await WeatherApiEndpoints.GetMyPlace("santo-domingo", _redisStore);
+
+        Assert.NotNull(response);
+        Assert.IsType<Ok>(response);
+        var result = response as Ok;
+        Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
+    }
+
+    [Fact]
+    public async Task ShouldGenerateAWeatherSummary_WhenPlaceIdMatch()
+    {
+        var weather = new WeatherApiModel(
+           new CurrentWeather(new Precipitation(0), 30, 1, "Clear sky", new Wind(10)),
+           new Hourly([
+               new DataHourlyPregression( DateTime.Now, 1, 30),
+                    new DataHourlyPregression(DateTime.Now.AddHours(1), 1, 30),
+                    new DataHourlyPregression(DateTime.Now.AddHours(2), 1, 30),
+               ]),
+           new Daily([
+               new DataDailyPregression(new DateTime().AddDays(1), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(2), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(3), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(4), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(5), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(6), 1, new AllDayTemperaturePregression(30, 20))
+               ]));
+        var placeId = "santo-domingo-este";
+
+        _geminiOptions.Model = "Gemini";
+        _geminiOptions.Key = Guid.NewGuid().ToString();
+
+        _weatherService.GetWeather("santo-domingo-este", "metric", _weatherOptions.Key).Returns(weather);
+
+        string weatherJson = JsonSerializer.Serialize(weather);
+
+        var prompt = $"Considering the following weather conditions, suggest an activity for today in {placeId}. " +
+        "Please keep the response to a moderate length, providing enough detail " +
+        $"to be helpful but not overly verbose and don't use markdown. Here is the weather details: {weatherJson}";
+
+        var body = new GeminiRequestBody([
+                new GeminiContent([
+                        new GeminiPart(prompt)
+                        ])
+            ]);
+
+        var geminiTextResponse = "Test Response";
+        var geminiResponse = new GeminiResponse([
+                new GeminiCandidates(new GeminiContent([
+                        new GeminiPart(geminiTextResponse)
+                        ])),
+            ]);
+
+        _geminiService.TextGeneration(body, _geminiOptions.Model, _geminiOptions.Key).ReturnsForAnyArgs(geminiResponse);
+
+        var response = await WeatherApiEndpoints.GetWeatherSummary(placeId, "metric", _weatherService, _geminiService, _weatherOptions, _geminiOptions);
+
+        Assert.NotNull(response);
+        Assert.IsType<Ok<string>>(response);
+        var result = response as Ok<string>;
+        Assert.Equal(geminiTextResponse, result.Value);
     }
 }
