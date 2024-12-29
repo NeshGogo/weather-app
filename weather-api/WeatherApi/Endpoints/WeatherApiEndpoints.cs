@@ -37,6 +37,8 @@ public static class WeatherApiEndpoints
     internal static async Task<GetWeatherResponse> GetWeather(string placeId, [FromQuery] string units, IWeatherService service, WeatherOptions options)
     {
         var weather = await service.GetWeather(placeId, units, options.Key);
+        
+        if (weather is null) return null;
 
         var hourly = weather.hourly.Data.Select(p => new Progression($"{p.Date.Hour}:00", p.Icon, $"{Math.Round(p.Temperature)}°"));
         var daily = weather.daily.Data.Select(p =>

@@ -1,7 +1,6 @@
 ﻿using NSubstitute;
 using WeatherApi.Endpoints;
 using WeatherApi.Infrastructure.WeatherService;
-using WeatherApi.Models;
 
 namespace WeatherApi.Test.Endpoints;
 
@@ -48,5 +47,64 @@ public class WeatherApiTest
         var results = await WeatherApiEndpoints.GetPlaces("London", _weatherService, _weatherOptions);
 
         Assert.Empty(results);
+    }
+
+    [Fact]
+    public async Task ShouldGetWeather_WhenPlaceIdMatch()
+    {
+        var weather = new WeatherApiModel(
+            new CurrentWeather(new Precipitation(0), 30, 1, "Clear sky", new Wind(10)),
+            new Hourly([
+                new DataHourlyPregression( DateTime.Now, 1, 30),
+                    new DataHourlyPregression(DateTime.Now.AddHours(1), 1, 30),
+                    new DataHourlyPregression(DateTime.Now.AddHours(2), 1, 30),
+                ]),
+            new Daily([
+                new DataDailyPregression(new DateTime().AddDays(1), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(2), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(3), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(4), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(5), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(6), 1, new AllDayTemperaturePregression(30, 20))
+                ]));
+
+        _weatherService.GetWeather("santo-domingo-este", "metric", _weatherOptions.Key).Returns(weather);
+
+        var result = await WeatherApiEndpoints.GetWeather("santo-domingo-este", "metric", _weatherService, _weatherOptions);
+
+        Assert.NotNull(result);
+        Assert.Equal(0, result.Precipitation);
+        Assert.Equal(30, result.Temperature);
+        Assert.Equal(10, result.Wind);
+        Assert.Equal(1, result.Icon);
+        Assert.Equal("Clear sky", result.Summary);
+        Assert.Equal(3, result.Hourly.Count());
+        Assert.Equal(6, result.Daily.Count());
+    }
+
+    [Fact]
+    public async Task ShouldNotGetWeather_WhenPlaceIdNotMatch()
+    {
+        var weather = new WeatherApiModel(
+            new CurrentWeather(new Precipitation(0), 30, 1, "Clear sky", new Wind(10)),
+            new Hourly([
+                new DataHourlyPregression( DateTime.Now, 1, 30),
+                    new DataHourlyPregression(DateTime.Now.AddHours(1), 1, 30),
+                    new DataHourlyPregression(DateTime.Now.AddHours(2), 1, 30),
+                ]),
+            new Daily([
+                new DataDailyPregression(new DateTime().AddDays(1), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(2), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(3), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(4), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(5), 1, new AllDayTemperaturePregression(30, 20)),
+                new DataDailyPregression(new DateTime().AddDays(6), 1, new AllDayTemperaturePregression(30, 20))
+                ]));
+
+        _weatherService.GetWeather("santo-domingo-este", "metric", _weatherOptions.Key).Returns(weather);
+
+        var result = await WeatherApiEndpoints.GetWeather("santo-domingo", "metric", _weatherService, _weatherOptions);
+
+        Assert.Null(result);
     }
 }
