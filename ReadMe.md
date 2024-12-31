@@ -21,10 +21,12 @@ This weather app provides real-time weather information for any location worldwi
 - Dark Mode
 
 **Required technologies**
-- .Net 6
+- .Net 8
 - Docker
 - Angular
 - NodeJS
+- Tailwind
+- Redis
 
 **Getting Started**
 
@@ -38,7 +40,7 @@ This weather app provides real-time weather information for any location worldwi
     - Get your Meteosource key at [Meteosource](https://www.meteosource.com).
     - Get your Gemini key at [Google AI Studio](https://aistudio.google.com).
   
-3. **In your backend project, add your Meteosource and Gemini API keys to the `AppSettings.Development.json` file. For production, consider using a more secure approach like Azure Key Vault or environment variables.**
+3. **In your backend project, add your Meteosource and Gemini API keys to the `appsettings.Development.json` file. For production, consider using a more secure approach like Azure Key Vault or environment variables.**
 
 4. **Run `docker-compose up` at `weather-app` folder to start the containers.
 
