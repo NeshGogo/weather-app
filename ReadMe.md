@@ -57,5 +57,5 @@ This weather app provides real-time weather information for any location worldwi
 7. **Access the app:** Navigate to `http://localhost:4200` in your web browser.
     
 
-### APP Design
+### APP Design by @albert2297
 ![App Design](./Resources/design.jpg)
