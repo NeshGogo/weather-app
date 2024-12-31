@@ -1,6 +1,7 @@
 # Weather App
 
 **Description**
+
 This weather app provides real-time weather information for any location worldwide. It leverages a reliable weather API to fetch accurate data, including:
 
 - **Current Weather:**
@@ -19,6 +20,12 @@ This weather app provides real-time weather information for any location worldwi
 - Location-Based Weather
 - Dark Mode
 
+**Required technologies**
+- .Net 6
+- Docker
+- Angular
+- NodeJS
+
 **Getting Started**
 
 1. **Clone the Repository:**
@@ -27,17 +34,26 @@ This weather app provides real-time weather information for any location worldwi
    git clone https://github.com/neshgogo/weather-app.git
 
    ```
+2. **To use this application, you'll need API keys from both Meteosource and Google AI Studio:**
+    - Get your Meteosource key at [Meteosource](https://www.meteosource.com).
+    - Get your Gemini key at [Google AI Studio](https://aistudio.google.com).
+  
+3. **In your backend project, add your Meteosource and Gemini API keys to the `AppSettings.Development.json` file. For production, consider using a more secure approach like Azure Key Vault or environment variables.**
 
-2. **Install Dependencies:**
+4. **Run `docker-compose up` at `weather-app` folder to start the containers.
+
+5. **Install Dependencies:**
 
     ```bash
     cd weatherWeb
     npm install
     ```
-3. **Run the App:**
+6. **Run the App:**
     ```
     ng serve
     ```
+7. **Access the app:** Navigate to `http://localhost:4200` in your web browser.
+    
 
 ### APP Design
 ![App Design](./Resources/design.jpg)
